@@ -1,0 +1,11 @@
+---
+
+# see https://taskfile.dev/docs/reference/schema#version
+version: "3"
+
+tasks:
+  default:
+    desc: "List available tasks"
+    cmds:
+      - task --list
+    silent: true
