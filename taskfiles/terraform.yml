@@ -13,6 +13,8 @@ env:
 # see https://taskfile.dev/docs/reference/schema#includes
 includes:
   1password:
+    aliases:
+      - "1p"
     flatten: false
     namespace: "1password"
     optional: false
@@ -148,6 +150,77 @@ tasks:
     silent: true
     vars:
       command: "{{.command}}"
+
+  stacks:
+    desc: "Run `terraform stacks` and inject Secrets from 1Password"
+    deps:
+      - preflight
+    cmds:
+      - |
+        {{.OP_RUN}} \
+          terraform \
+            stacks \
+              {{.command}}
+    silent: true
+    vars:
+      command: "{{.command}}"
+
+  stacks-fmt:
+    aliases:
+      - s-fmt
+    desc: "Run `terraform stacks fmt`"
+    deps:
+      - preflight
+    cmds:
+      - |
+        terraform \
+          stacks \
+            fmt
+    silent: true
+
+  stacks-init:
+    aliases:
+      - s-init
+    desc: "Run `terraform stacks init` and inject Secrets from 1Password"
+    deps:
+      - preflight
+    cmds:
+      - |
+        {{.OP_RUN}} \
+          terraform \
+            stacks \
+              init
+    silent: true
+
+  stacks-providers-lock:
+    aliases:
+      - s-p-lock
+    desc: "Run `terraform stacks providers-lock`"
+    deps:
+      - preflight
+    cmds:
+      - |
+        terraform \
+          stacks \
+            providers-lock \
+              -platform="{{.platform}}"
+    vars:
+      platform: "linux_amd64"
+    silent: true
+
+  stacks-validate:
+    aliases:
+      - s-validate
+    desc: "Run `terraform stacks validate` and inject Secrets from 1Password"
+    deps:
+      - preflight
+    cmds:
+      - |
+        {{.OP_RUN}} \
+          terraform \
+            stacks \
+              validate
+    silent: true
 
   taint:
     desc: "Run `terraform taint` and inject Secrets from 1Password"
